@@ -66,7 +66,78 @@ namespace Sample_webproject.Repository
             else
                 return false;
         }
-       
+       public List<Test> GetList()
+        {
+            connection();
+            List<Test> studentlist = new List<Test>();
+
+            SqlCommand cmd = new SqlCommand("sp_InsertUpdateDelete_Test", con);
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@Query", 4);
+            SqlDataAdapter sd = new SqlDataAdapter(cmd);
+            DataTable dt = new DataTable();
+
+            con.Open();
+            sd.Fill(dt);
+            con.Close();
+
+            foreach (DataRow dr in dt.Rows)
+            {
+                studentlist.Add(
+                    new Test
+                    {
+                        ID = Convert.ToInt32(dr["ID"]),
+                        Test_Name = Convert.ToString(dr["Test_Name"]),
+                        Test_Date = Convert.ToDateTime(dr["Test_Date"]),
+                        Test_Price = Convert.ToDecimal(dr["Test_Price"]),
+                        Test_Result = Convert.ToString(dr["Test_Result"]),
+                        Doctor_Remarks = Convert.ToString(dr["Doctor_Remarks"])
+                    });
+            }
+            return studentlist;
+        }
+        public bool UpdateDetails(Test test)
+        {
+            connection();
+            SqlCommand sqlCmd = new SqlCommand("sp_InsertUpdateDelete_Test", con);
+            sqlCmd.CommandType = CommandType.StoredProcedure;
+            sqlCmd.Parameters.AddWithValue("@ID", test.ID);
+            sqlCmd.Parameters.AddWithValue("@Test_Name", test.Test_Name);
+            sqlCmd.Parameters.AddWithValue("@Test_Date", test.Test_Date);
+            sqlCmd.Parameters.AddWithValue("@Test_Price", test.Test_Price);
+            sqlCmd.Parameters.AddWithValue("@Test_Result", test.Test_Result);
+            sqlCmd.Parameters.AddWithValue("@Doctor_Remarks", test.Doctor_Remarks);
+            sqlCmd.Parameters.AddWithValue("@Query", 2);
+
+            con.Open();
+            int i = sqlCmd.ExecuteNonQuery();
+            con.Close();
+
+            if (i >= 1)
+                return true;
+            else
+                return false;
+        }
+
+
+        public bool DeleteTest(int id)
+        {
+            connection();
+            SqlCommand cmd = new SqlCommand("sp_InsertUpdateDelete_Test", con);
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            cmd.Parameters.AddWithValue("@ID", id);
+            cmd.Parameters.AddWithValue("@Query", 3);
+
+            con.Open();
+            int i = cmd.ExecuteNonQuery();
+            con.Close();
+
+            if (i >= 1)
+                return true;
+            else
+                return false;
+        }
        
     }
 }
