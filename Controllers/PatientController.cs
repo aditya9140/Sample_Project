@@ -16,7 +16,7 @@ namespace Sample_webproject.Controllers
        
       public ActionResult InsertUserDetails()
         {
-            AT_Data_Access_Layer dbhandle = new AT_Data_Access_Layer();
+            PatientDataAccessLayer dbhandle = new PatientDataAccessLayer();
             ModelState.Clear();
             return View(dbhandle.GetList());
         }
