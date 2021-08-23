@@ -183,7 +183,46 @@ namespace Sample_webproject.Controllers
             return RedirectToAction("InsertUserDetails");
         }
     
-    
+      [HttpGet]
+        public ActionResult Edit(int id)
+        {
+            PatientDataAccessLayer sdb = new PatientDataAccessLayer();
+            return View(sdb.GetList().Find(smodel => smodel.ID == id));
+        }
+
+
+        [HttpPost]
+        public ActionResult Edit(int id, Test smodel)
+        {
+            try
+            {
+                PatientDataAccessLayer sdb = new PatientDataAccessLayer();
+                sdb.UpdateDetails(smodel);
+                return RedirectToAction("InsertUserDetails");
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+
+        public ActionResult Delete(int id)
+        {
+            try
+            {
+                PatientDataAccessLayer sdb = new PatientDataAccessLayer();
+                if (sdb.DeleteTest(id))
+                {
+                    ViewBag.AlertMsg = "Test Deleted Successfully";
+                }
+                return RedirectToAction("InsertUserDetails");
+            }
+            catch
+            {
+                return View();
+            }
+        }
     
     }
 
